@@ -1,3 +1,4 @@
+use bevy::asset::uuid_handle;
 use bevy::camera::visibility::RenderLayers;
 use bevy::mesh::MeshVertexBufferLayoutRef;
 use bevy::pbr::{MAX_CASCADES_PER_LIGHT, MAX_DIRECTIONAL_LIGHTS};
@@ -134,9 +135,12 @@ impl CameraTargets
         walls_image.resize(target_size);
         objects_image.resize(target_size);
 
-        let floor_image_handle: Handle<Image> = Handle::weak_from_u128(9127312736151891273);
-        let walls_image_handle: Handle<Image> = Handle::weak_from_u128(7264512947825624361);
-        let objects_image_handle: Handle<Image> = Handle::weak_from_u128(2987462343287146234);
+        let floor_image_handle: Handle<Image> =
+            uuid_handle!("c2800bc0-cbb4-4de9-b263-63d5a7887638");
+        let walls_image_handle: Handle<Image> =
+            uuid_handle!("d6349821-812d-4e03-b437-566896053d92");
+        let objects_image_handle: Handle<Image> =
+            uuid_handle!("8d6445b4-c091-4e89-bae5-fbb0438415db");
 
         images.insert(floor_image_handle.id(), floor_image);
         images.insert(walls_image_handle.id(), walls_image);

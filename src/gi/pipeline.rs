@@ -1,4 +1,4 @@
-use bevy::asset::RenderAssetUsages;
+use bevy::asset::{uuid_handle, RenderAssetUsages};
 use bevy::image::{ImageAddressMode, ImageFilterMode, ImageSampler, ImageSamplerDescriptor};
 use bevy::prelude::*;
 use bevy::render::extract_resource::ExtractResource;
@@ -84,12 +84,12 @@ impl GiTargets
             ImageFilterMode::Nearest,
         );
 
-        let sdf_target: Handle<Image> = Handle::weak_from_u128(2390847209461232343);
-        let ss_probe_target: Handle<Image> = Handle::weak_from_u128(3423231236817235162);
-        let ss_bounce_target: Handle<Image> = Handle::weak_from_u128(3198273198312367527);
-        let ss_blend_target: Handle<Image> = Handle::weak_from_u128(7782312739182735881);
-        let ss_filter_target: Handle<Image> = Handle::weak_from_u128(8761232615172413412);
-        let ss_pose_target: Handle<Image> = Handle::weak_from_u128(4728165084756128470);
+        let sdf_target: Handle<Image> = uuid_handle!("9ffc62a2-3f06-4856-9cb3-a24cf265e5e4");
+        let ss_probe_target: Handle<Image> = uuid_handle!("03eb3c9a-00b8-4637-a523-75f07d519706");
+        let ss_bounce_target: Handle<Image> = uuid_handle!("0d208b96-3b73-4cb8-8443-0228b6326d0c");
+        let ss_blend_target: Handle<Image> = uuid_handle!("023f201f-e3d0-4e29-b4b1-9938138713b7");
+        let ss_filter_target: Handle<Image> = uuid_handle!("acc10c8e-2fd7-46bd-a952-c078905bce5a");
+        let ss_pose_target: Handle<Image> = uuid_handle!("487fe249-0bc2-4d51-8f07-e3568f83de45");
 
         images.insert(sdf_target.id(), sdf_tex);
         images.insert(ss_probe_target.id(), ss_probe_tex);
