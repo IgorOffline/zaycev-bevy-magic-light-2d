@@ -1,6 +1,7 @@
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
 use bevy::render::camera::RenderTarget;
+use bevy::render::view::Hdr;
 use bevy_magic_light_2d::prelude::*;
 
 fn main()
@@ -111,10 +112,10 @@ fn setup(mut commands: Commands, camera_targets: Res<CameraTargets>)
         .spawn((
             Camera2d,
             Camera {
-                hdr: true,
                 target: RenderTarget::Image(camera_targets.floor_target.clone().into()),
                 ..Default::default()
             },
+            Hdr,
             Name::new("main_camera"),
             FloorCamera,
         ))

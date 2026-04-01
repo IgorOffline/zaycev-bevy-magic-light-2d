@@ -1,22 +1,22 @@
-use bevy::core_pipeline::bloom::Bloom;
+use bevy::camera::visibility::RenderLayers;
+use bevy::mesh::MeshVertexBufferLayoutRef;
 use bevy::pbr::{MAX_CASCADES_PER_LIGHT, MAX_DIRECTIONAL_LIGHTS};
+use bevy::post_process::bloom::Bloom;
 use bevy::prelude::*;
 use bevy::reflect::TypePath;
-use bevy::render::mesh::MeshVertexBufferLayoutRef;
 use bevy::render::render_resource::{
     AsBindGroup,
     Extent3d,
     RenderPipelineDescriptor,
-    ShaderDefVal,
-    ShaderRef,
     SpecializedMeshPipelineError,
     TextureDescriptor,
     TextureDimension,
     TextureFormat,
     TextureUsages,
 };
-use bevy::render::view::RenderLayers;
-use bevy::sprite::{Material2d, Material2dKey};
+use bevy::render::view::Hdr;
+use bevy::shader::{ShaderDefVal, ShaderRef};
+use bevy::sprite_render::{Material2d, Material2dKey};
 
 use crate::gi::constants::{POST_PROCESSING_MATERIAL, POST_PROCESSING_RECT};
 use crate::gi::pipeline::GiTargetsWrapper;
@@ -221,9 +221,9 @@ pub fn setup_post_processing_camera(
         Camera2d, 
         Camera{
             order: 1,
-            hdr: true,
             ..default()
         },
+        Hdr,
         Bloom {
             intensity: 0.1,
             ..default()

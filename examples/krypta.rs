@@ -54,9 +54,7 @@ fn main()
                     },
                 }),
             BevyMagicLight2DPlugin,
-            EguiPlugin {
-                enable_multipass_for_primary_context: false,
-            },
+            EguiPlugin,
             ResourceInspectorPlugin::<BevyMagicLight2DSettings>::new(),
         ))
         .insert_resource(BevyMagicLight2DSettings {
@@ -824,7 +822,6 @@ fn setup(
         .spawn((
             Camera2d,
             Camera {
-                hdr: false,
                 target: RenderTarget::Image(camera_targets.floor_target.clone().into()),
                 ..default()
             },
@@ -838,7 +835,6 @@ fn setup(
         .spawn((
             Camera2d,
             Camera {
-                hdr: false,
                 target: RenderTarget::Image(camera_targets.walls_target.clone().into()),
                 ..default()
             },
@@ -852,7 +848,6 @@ fn setup(
         .spawn((
             Camera2d,
             Camera {
-                hdr: false,
                 target: RenderTarget::Image(camera_targets.objects_target.clone().into()),
                 ..default()
             },

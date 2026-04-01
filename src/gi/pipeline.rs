@@ -1,7 +1,8 @@
+use bevy::asset::RenderAssetUsages;
 use bevy::image::{ImageAddressMode, ImageFilterMode, ImageSampler, ImageSamplerDescriptor};
 use bevy::prelude::*;
 use bevy::render::extract_resource::ExtractResource;
-use bevy::render::render_asset::{RenderAssetUsages, RenderAssets};
+use bevy::render::render_asset::RenderAssets;
 use bevy::render::render_resource::*;
 use bevy::render::renderer::RenderDevice;
 use bevy::render::texture::GpuImage;
@@ -788,7 +789,7 @@ impl FromWorld for LightPassPipeline
             layout:                           vec![sdf_bind_group_layout.clone()],
             shader:                           shader_sdf,
             shader_defs:                      vec![],
-            entry_point:                      SDF_PIPELINE_ENTRY.into(),
+            entry_point:                      Some(SDF_PIPELINE_ENTRY.into()),
             push_constant_ranges:             vec![],
             zero_initialize_workgroup_memory: false,
         });
@@ -798,7 +799,7 @@ impl FromWorld for LightPassPipeline
             layout:                           vec![ss_probe_bind_group_layout.clone()],
             shader:                           gi_ss_probe,
             shader_defs:                      vec![],
-            entry_point:                      SS_PROBE_PIPELINE_ENTRY.into(),
+            entry_point:                      Some(SS_PROBE_PIPELINE_ENTRY.into()),
             push_constant_ranges:             vec![],
             zero_initialize_workgroup_memory: false,
         });
@@ -808,7 +809,7 @@ impl FromWorld for LightPassPipeline
             layout:                           vec![ss_bounce_bind_group_layout.clone()],
             shader:                           gi_ss_bounce,
             shader_defs:                      vec![],
-            entry_point:                      SS_BOUNCE_PIPELINE_ENTRY.into(),
+            entry_point:                      Some(SS_BOUNCE_PIPELINE_ENTRY.into()),
             push_constant_ranges:             vec![],
             zero_initialize_workgroup_memory: false,
         });
@@ -818,7 +819,7 @@ impl FromWorld for LightPassPipeline
             layout:                           vec![ss_blend_bind_group_layout.clone()],
             shader:                           gi_ss_blend,
             shader_defs:                      vec![],
-            entry_point:                      SS_BLEND_PIPELINE_ENTRY.into(),
+            entry_point:                      Some(SS_BLEND_PIPELINE_ENTRY.into()),
             push_constant_ranges:             vec![],
             zero_initialize_workgroup_memory: false,
         });
@@ -828,7 +829,7 @@ impl FromWorld for LightPassPipeline
             layout:                           vec![ss_filter_bind_group_layout.clone()],
             shader:                           gi_ss_filter,
             shader_defs:                      vec![],
-            entry_point:                      SS_FILTER_PIPELINE_ENTRY.into(),
+            entry_point:                      Some(SS_FILTER_PIPELINE_ENTRY.into()),
             push_constant_ranges:             vec![],
             zero_initialize_workgroup_memory: false,
         });

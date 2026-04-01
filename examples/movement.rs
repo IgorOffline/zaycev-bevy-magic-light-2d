@@ -2,6 +2,7 @@ use std::f64::consts::PI;
 
 use bevy::prelude::*;
 use bevy::render::camera::RenderTarget;
+use bevy::render::view::Hdr;
 use bevy_inspector_egui::bevy_egui::EguiPlugin;
 use bevy_inspector_egui::quick::*;
 use bevy_magic_light_2d::prelude::*;
@@ -25,9 +26,7 @@ fn main()
                 ..Default::default()
             }),
             BevyMagicLight2DPlugin,
-            EguiPlugin {
-                enable_multipass_for_primary_context: false,
-            },
+            EguiPlugin,
             ResourceInspectorPlugin::<BevyMagicLight2DSettings>::new(),
         ))
         .register_type::<BevyMagicLight2DSettings>()
@@ -120,10 +119,10 @@ fn setup(mut commands: Commands, camera_targets: Res<CameraTargets>)
     commands.spawn((
         Camera2d,
         Camera {
-            hdr: true,
             target: RenderTarget::Image(camera_targets.floor_target.clone().into()),
             ..Default::default()
         },
+        Hdr,
         Name::new("main_camera"),
         FloorCamera,
     ));
