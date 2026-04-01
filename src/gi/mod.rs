@@ -146,7 +146,7 @@ pub fn handle_window_resize(
             return;
         }
         
-        assets_mesh.insert(
+        let _ = assets_mesh.insert(
             POST_PROCESSING_RECT.id(),
             Mesh::from(bevy::math::primitives::Rectangle::new(
                 res_target_sizes.primary_target_size.x,
@@ -154,7 +154,7 @@ pub fn handle_window_resize(
             )),
         );
 
-        assets_material.insert(
+        let _ = assets_material.insert(
             POST_PROCESSING_MATERIAL.id(),
             PostProcessingMaterial::create(&res_camera_targets, &res_gi_targets_wrapper),
         );

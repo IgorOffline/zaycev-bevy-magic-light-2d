@@ -91,12 +91,12 @@ impl GiTargets
         let ss_filter_target: Handle<Image> = uuid_handle!("acc10c8e-2fd7-46bd-a952-c078905bce5a");
         let ss_pose_target: Handle<Image> = uuid_handle!("487fe249-0bc2-4d51-8f07-e3568f83de45");
 
-        images.insert(sdf_target.id(), sdf_tex);
-        images.insert(ss_probe_target.id(), ss_probe_tex);
-        images.insert(ss_bounce_target.id(), ss_bounce_tex);
-        images.insert(ss_blend_target.id(), ss_blend_tex);
-        images.insert(ss_filter_target.id(), ss_filter_tex);
-        images.insert(ss_pose_target.id(), ss_pose_tex);
+        let _ = images.insert(sdf_target.id(), sdf_tex);
+        let _ = images.insert(ss_probe_target.id(), ss_probe_tex);
+        let _ = images.insert(ss_bounce_target.id(), ss_bounce_tex);
+        let _ = images.insert(ss_blend_target.id(), ss_blend_tex);
+        let _ = images.insert(ss_filter_target.id(), ss_filter_tex);
+        let _ = images.insert(ss_pose_target.id(), ss_pose_tex);
 
         Self {
             sdf_target,
