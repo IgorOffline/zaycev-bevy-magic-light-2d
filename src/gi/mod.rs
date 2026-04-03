@@ -4,8 +4,8 @@ use bevy::render::extract_resource::ExtractResourcePlugin;
 use bevy::render::render_graph::{self, RenderGraph, RenderLabel};
 use bevy::render::render_resource::*;
 use bevy::render::renderer::RenderContext;
-use bevy::render::{Render, RenderApp, RenderSet};
-use bevy::sprite::Material2dPlugin;
+use bevy::render::{Render, RenderApp, RenderSystems};
+use bevy::sprite_render::Material2dPlugin;
 use bevy::window::{PrimaryWindow, WindowResized};
 
 use self::pipeline::GiTargets;
@@ -90,8 +90,8 @@ impl Plugin for BevyMagicLight2DPlugin
             .add_systems(
                 Render,
                 (
-                    system_prepare_pipeline_assets.in_set(RenderSet::Prepare),
-                    system_queue_bind_groups.in_set(RenderSet::Queue),
+                    system_prepare_pipeline_assets.in_set(RenderSystems::Prepare),
+                    system_queue_bind_groups.in_set(RenderSystems::Queue),
                 ),
             );
 
@@ -131,7 +131,7 @@ pub fn handle_window_resize(
     mut res_gi_targets_wrapper: ResMut<GiTargetsWrapper>,
     mut res_camera_targets:     ResMut<CameraTargets>,
 
-    mut window_resized_evr: EventReader<WindowResized>,
+    mut window_resized_evr: MessageReader<WindowResized>,
 ) {
     for _ in window_resized_evr.read() {
         let window = query_window
@@ -146,7 +146,7 @@ pub fn handle_window_resize(
             return;
         }
         
-        assets_mesh.insert(
+        let _ = assets_mesh.insert(
             POST_PROCESSING_RECT.id(),
             Mesh::from(bevy::math::primitives::Rectangle::new(
                 res_target_sizes.primary_target_size.x,
@@ -154,7 +154,7 @@ pub fn handle_window_resize(
             )),
         );
 
-        assets_material.insert(
+        let _ = assets_material.insert(
             POST_PROCESSING_MATERIAL.id(),
             PostProcessingMaterial::create(&res_camera_targets, &res_gi_targets_wrapper),
         );

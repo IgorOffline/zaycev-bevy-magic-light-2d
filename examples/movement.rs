@@ -1,7 +1,8 @@
 use std::f64::consts::PI;
 
+use bevy::camera::RenderTarget;
 use bevy::prelude::*;
-use bevy::render::camera::RenderTarget;
+use bevy::render::view::Hdr;
 use bevy_inspector_egui::bevy_egui::EguiPlugin;
 use bevy_inspector_egui::quick::*;
 use bevy_magic_light_2d::prelude::*;
@@ -17,7 +18,7 @@ fn main()
         .add_plugins((
             DefaultPlugins.set(WindowPlugin {
                 primary_window: Some(Window {
-                    resolution: (1024., 1024.).into(),
+                    resolution: (1024, 1024).into(),
                     title: "Bevy Magic Light 2D: Square Example".into(),
                     resizable: false,
                     ..Default::default()
@@ -25,16 +26,13 @@ fn main()
                 ..Default::default()
             }),
             BevyMagicLight2DPlugin,
-            EguiPlugin {
-                enable_multipass_for_primary_context: false,
-            },
+            EguiPlugin::default(),
             ResourceInspectorPlugin::<BevyMagicLight2DSettings>::new(),
         ))
         .register_type::<BevyMagicLight2DSettings>()
         .register_type::<LightPassParams>()
         .add_systems(Startup, setup.after(setup_post_processing_camera))
-        .add_systems(Update, system_move_camera)
-        .add_systems(Update, move_collider)
+        .add_systems(Update, (system_move_camera, move_collider))
         .insert_resource(BevyMagicLight2DSettings {
             light_pass_params: LightPassParams {
                 reservoir_size: 8,
@@ -50,83 +48,72 @@ fn main()
 
 fn setup(mut commands: Commands, camera_targets: Res<CameraTargets>)
 {
-    let mut occluders = vec![];
-    let occluder_entity = commands
-        .spawn((
+    commands.spawn((
+        Name::new("occluders"),
+        Visibility::default(),
+        Transform::default(),
+        children![(
             Transform::default(),
             Visibility::default(),
             LightOccluder2D {
                 h_size: Vec2::new(80.0, 40.0),
             },
             Mover,
-        ))
-        .id();
+        )],
+    ));
 
-    occluders.push(occluder_entity);
-
-    commands
-        .spawn((Visibility::default(), Transform::default()))
-        .insert(Name::new("occluders"))
-        .add_children(&occluders);
-
-    // Add lights.
-    let mut lights = vec![];
-    {
-        let spawn_light = |cmd: &mut Commands,
-                           x: f32,
-                           y: f32,
-                           name: &'static str,
-                           light_source: OmniLightSource2D| {
-            return cmd
-                .spawn(Name::new(name))
-                .insert(light_source)
-                .insert((
-                    Visibility::default(),
-                    Transform::from_translation(Vec3::new(x, y, 0.0)),
-                ))
-                .id();
-        };
-
-        lights.push(spawn_light(
-            &mut commands,
-            -512.,
-            -512.,
-            "left",
-            OmniLightSource2D {
-                intensity: 10.0,
-                color: Color::srgb_u8(255, 255, 0),
-                falloff: Vec3::new(1.5, 10.0, 0.01),
-                ..default()
-            },
-        ));
-        lights.push(spawn_light(
-            &mut commands,
-            512.,
-            -512.,
-            "right",
-            OmniLightSource2D {
-                intensity: 10.0,
-                color: Color::srgb_u8(0, 255, 255),
-                falloff: Vec3::new(1.5, 10.0, 0.01),
-                ..default()
-            },
-        ));
-    }
-    commands
-        .spawn((Transform::default(), Visibility::default()))
-        .insert(Name::new("lights"))
-        .add_children(&lights);
+    let omni_light_source_base = OmniLightSource2D {
+        falloff: Vec3::new(1.5, 10.0, 0.01),
+        intensity: 10.0,
+        ..default()
+    };
+    commands.spawn((
+        Name::new("lights"),
+        Transform::default(),
+        Visibility::default(),
+        children![
+            light_source(
+                -512.,
+                -512.,
+                "left",
+                OmniLightSource2D {
+                    color: Color::srgb_u8(255, 255, 0),
+                    ..omni_light_source_base
+                },
+            ),
+            light_source(
+                512.,
+                -512.,
+                "right",
+                OmniLightSource2D {
+                    color: Color::srgb_u8(0, 255, 255),
+                    ..omni_light_source_base
+                },
+            )
+        ],
+    ));
 
     commands.spawn((
         Camera2d,
         Camera {
-            hdr: true,
             target: RenderTarget::Image(camera_targets.floor_target.clone().into()),
             ..Default::default()
         },
+        Hdr,
         Name::new("main_camera"),
         FloorCamera,
     ));
+}
+
+fn light_source(x: f32, y: f32, name: &'static str, light_source: OmniLightSource2D)
+    -> impl Bundle
+{
+    (
+        Name::new(name),
+        light_source,
+        Visibility::default(),
+        Transform::from_translation(Vec3::new(x, y, 0.0)),
+    )
 }
 
 fn system_move_camera(
